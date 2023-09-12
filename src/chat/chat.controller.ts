@@ -1,21 +1,11 @@
-import {
-  Controller,
-  Get,
-  Post,
-  Put,
-  Delete,
-  Param,
-  Body,
-  Request,
-  UseGuards,
-} from '@nestjs/common';
+import { Controller, Get, Param, Request, UseGuards } from '@nestjs/common';
 import { ChatService } from './chat.service';
 import { Chat } from './chat.entity';
 import {
-  ApiTags,
+  ApiBearerAuth,
   ApiOperation,
   ApiResponse,
-  ApiBearerAuth,
+  ApiTags,
 } from '@nestjs/swagger';
 import { JwtAuthGuard } from 'src/auth/guards/jwt-auth.guard';
 
@@ -54,8 +44,7 @@ export class ChatController {
   @Get()
   async getAllChats(@Request() req) {
     const userId = req.user.id;
-    const chats = await this.chatService.getChatsByUserId(userId);
-    return chats;
+    return await this.chatService.getChatsByUserId(userId);
   }
   // @Delete(':id')
   // @ApiOperation({ summary: 'Delete a user by ID' })

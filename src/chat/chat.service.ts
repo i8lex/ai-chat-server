@@ -39,8 +39,7 @@ export class ChatService {
   //   return savedChat;
   // }
   async getChatsByUserId(userId: number): Promise<Chat[]> {
-    const chats = await this.chatRepository.find({ where: { userId } });
-    return chats;
+    return await this.chatRepository.find({ where: { userId } });
   }
 
   async findById(id: number): Promise<Chat> {
@@ -49,8 +48,7 @@ export class ChatService {
       return;
       // throw new NotFoundException('Chat not found');
     } else {
-      const chat = await this.chatRepository.findOne({ where: { id } });
-      return chat;
+      return await this.chatRepository.findOne({ where: { id } });
     }
   }
   async saveChat(
