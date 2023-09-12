@@ -56,7 +56,6 @@ export class ChatService {
     userId: number,
     messages: Message,
   ): Promise<Chat> {
-    console.log('save chat', chatId);
     const user = await this.userRepository.findOne({ where: { id: userId } });
     if (!user) {
       throw new NotFoundException('User not found');

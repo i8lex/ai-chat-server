@@ -1,21 +1,7 @@
-import {
-  Controller,
-  Post,
-  Body,
-  UseGuards,
-  Put,
-  Request,
-} from '@nestjs/common';
+import { Controller, Post, Body } from '@nestjs/common';
 import { AuthService } from './auth.service';
 import { User } from '../user/user.entity';
-import {
-  ApiTags,
-  ApiOperation,
-  ApiResponse,
-  ApiBearerAuth,
-  ApiBody,
-} from '@nestjs/swagger';
-import { JwtAuthGuard } from './guards/jwt-auth.guard';
+import { ApiTags, ApiOperation, ApiResponse, ApiBody } from '@nestjs/swagger';
 import { LoginUserDTO } from './dto/login.dto';
 import { RegisterUserDTO } from './dto/register.dto';
 import { UserResponseDTO } from 'src/user/dto/UserResponse.dto';
@@ -35,7 +21,6 @@ export class AuthController {
   })
   @ApiBody({ type: RegisterUserDTO, required: true })
   async register(@Body() user: RegisterUserDTO): Promise<User> {
-    console.log(user);
     return this.authService.register(user);
   }
 

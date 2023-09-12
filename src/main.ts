@@ -1,6 +1,4 @@
-// ...
 import { IoAdapter } from '@nestjs/platform-socket.io';
-import { ExpressAdapter } from '@nestjs/platform-express';
 import * as express from 'express';
 import * as cors from 'cors';
 import { NestFactory } from '@nestjs/core';
@@ -9,7 +7,6 @@ import { WsAdapter } from '@nestjs/platform-ws';
 async function bootstrap() {
   const app = await NestFactory.create(AppModule, {
     cors: true,
-    //httpsOptions: httpsOptions,
   });
   app.use(cors());
   app.use(express.json());

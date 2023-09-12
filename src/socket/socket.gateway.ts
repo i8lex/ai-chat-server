@@ -39,7 +39,6 @@ export class SocketGateway implements OnGatewayConnection, OnGatewayDisconnect {
     client: Socket,
     body: { chatId: number; userId: number; message: string },
   ) {
-    console.log(`Received chat message from ${client.id}: ${body.message}`);
     try {
       const response = await this.openAIService.ask(body.message);
       const { message, userId, chatId } = body;
@@ -48,7 +47,6 @@ export class SocketGateway implements OnGatewayConnection, OnGatewayDisconnect {
         message,
         response,
       });
-      // console.log('Response from openAIService:', response);
       this.server.emit('chatMessage', { userId: client.id, message, response });
     } catch (error) {
       console.error('Error in openAIService.ask:', error);

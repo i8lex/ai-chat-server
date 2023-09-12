@@ -14,7 +14,6 @@ export class OpenAIService {
   }
 
   async ask(message: string): Promise<any> {
-    console.log('ask', message);
     if (!message) {
       throw new Error('Empty message from user');
     }
@@ -25,7 +24,6 @@ export class OpenAIService {
         model: 'gpt-3.5-turbo',
       });
 
-      console.log(response.choices[0].message);
       return response.choices[0].message;
     } catch (error) {
       throw error;

@@ -18,29 +18,7 @@ export class AuthService {
     private readonly userService: UserService,
     private readonly jwtService: JwtService,
   ) {}
-
-  async decodeToken(token: string): Promise<User | null> {
-    try {
-      const decodedToken = this.jwtService.decode(token) as { sub: number };
-      if (!decodedToken || !decodedToken.sub) {
-        return null;
-      }
-
-      const userId = decodedToken.sub;
-      const user = await this.userService.findById(userId);
-
-      if (!user) {
-        return null;
-      }
-
-      return user;
-    } catch (error) {
-      return null;
-    }
-  }
-
   async register(userDto: RegisterUserDTO): Promise<User> {
-    console.log(userDto.password);
     if (!userDto.password) {
       throw new BadRequestException('Password is required');
     }
@@ -82,7 +60,6 @@ export class AuthService {
   async validateUser(email: string, password: string): Promise<User> {
     const user = await this.userService.findByEmail(email);
     const passwordIsMatch = await bcrypt.compare(password, user.password);
-    console.log(email);
 
     if (user && passwordIsMatch) {
       return user;
