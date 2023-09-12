@@ -34,6 +34,7 @@ import { User } from 'src/user/user.entity';
     JwtAuthGuard,
     UserService,
   ],
+  exports: [AuthService],
   controllers: [AuthController],
 })
 export class AuthModule {}

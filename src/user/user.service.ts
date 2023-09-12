@@ -22,7 +22,7 @@ export class UserService {
   async findById(id: number): Promise<User> {
     return this.userRepository.findOne({
       where: { id: id },
-      relations: ['userWidgets'],
+      relations: ['chats'],
     });
   }
 

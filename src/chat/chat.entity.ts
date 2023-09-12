@@ -1,4 +1,5 @@
-import { Entity, PrimaryGeneratedColumn, Column } from 'typeorm';
+import { Entity, PrimaryGeneratedColumn, Column, ManyToOne } from 'typeorm';
+import { User } from '../user/user.entity';
 
 @Entity()
 export class Chat {
@@ -6,8 +7,18 @@ export class Chat {
   id: number;
 
   @Column()
-  userId: string;
+  userId: number;
 
-  @Column()
-  message: string;
+  @Column({ type: 'jsonb', nullable: true })
+  messages: {
+    userId: string;
+    message: string;
+    response: {
+      role: string;
+      content: string;
+    };
+  }[];
+
+  @ManyToOne(() => User, (user) => user.chats)
+  user: User;
 }

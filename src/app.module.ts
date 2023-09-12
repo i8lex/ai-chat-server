@@ -5,14 +5,11 @@ import { AppController } from './app.controller';
 import { AppService } from './app.service';
 import { SocketModule } from './socket/socket.module';
 import { OpenAIModule } from './openai/openai.module';
-import { AuthController } from './auth/auth.controller';
-import { AuthService } from './auth/auth.service';
 import { AuthModule } from './auth/auth.module';
 import { UserModule } from './user/user.module';
-import { UserController } from './user/user.controller';
-import { UserService } from './user/user.service';
 import { ConfigModule, ConfigService } from '@nestjs/config';
 import { User } from './user/user.entity';
+import { ChatModule } from './chat/chat.module';
 
 @Module({
   imports: [
@@ -35,6 +32,7 @@ import { User } from './user/user.entity';
     SocketModule,
     AuthModule,
     UserModule,
+    ChatModule,
   ],
   controllers: [AppController],
   providers: [AppService],

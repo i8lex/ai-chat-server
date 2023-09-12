@@ -7,7 +7,7 @@ import {
 } from 'typeorm';
 import { ApiProperty, ApiTags, ApiResponseProperty } from '@nestjs/swagger';
 import { IsEmail, IsNotEmpty } from 'class-validator';
-
+import { Chat } from 'src/chat/chat.entity';
 @Entity()
 @Unique(['email'])
 @ApiTags('Users')
@@ -45,9 +45,6 @@ export class User {
   })
   password: string;
 
-  @Column()
-  @ApiProperty({
-    example: 'password123',
-  })
-  chat: string;
+  @OneToMany(() => Chat, (chat) => chat.user)
+  chats: Chat[];
 }

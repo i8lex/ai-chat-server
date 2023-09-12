@@ -1,34 +1,83 @@
-import { Injectable } from '@nestjs/common';
+import { Injectable, NotFoundException } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
 import { Chat } from './chat.entity';
+import { User } from '../user/user.entity';
 
+type Message = {
+  userId: string;
+  message: string;
+  response: {
+    role: string;
+    content: string;
+  };
+};
 @Injectable()
 export class ChatService {
   constructor(
     @InjectRepository(Chat)
-    private readonly chatMessageRepository: Repository<Chat>,
+    private readonly chatRepository: Repository<Chat>,
+    @InjectRepository(User)
+    private readonly userRepository: Repository<User>,
   ) {}
 
-  async saveMessage(userId: string, message: string): Promise<Chat> {
-    const newMessage = new Chat();
-    newMessage.userId = userId;
-    newMessage.message = message;
-
-    const savedMessage = await this.chatMessageRepository.save(newMessage);
-
-    return savedMessage;
+  // async createChat(userId: number): Promise<Chat> {
+  //   const user = await this.userRepository.findOne({ where: { id: userId } });
+  //
+  //   if (!user) {
+  //     throw new NotFoundException('User not found');
+  //   }
+  //
+  //   const chat = new Chat();
+  //   chat.userId = user.id;
+  //
+  //   const savedChat = await this.chatRepository.save(chat);
+  //
+  //   user.chats = [savedChat];
+  //   await this.userRepository.save(user);
+  //
+  //   return savedChat;
+  // }
+  async getChatsByUserId(userId: number): Promise<Chat[]> {
+    const chats = await this.chatRepository.find({ where: { userId } });
+    return chats;
   }
 
-  async getAllMessages(): Promise<Chat[]> {
-    return await this.chatMessageRepository.find();
+  async findById(id: number): Promise<Chat> {
+    if (!id) {
+      console.log('error');
+      return;
+      // throw new NotFoundException('Chat not found');
+    } else {
+      const chat = await this.chatRepository.findOne({ where: { id } });
+      return chat;
+    }
   }
+  async saveChat(
+    chatId: number,
+    userId: number,
+    messages: Message,
+  ): Promise<Chat> {
+    console.log('save chat', chatId);
+    const user = await this.userRepository.findOne({ where: { id: userId } });
+    if (!user) {
+      throw new NotFoundException('User not found');
+    }
+    if (!chatId) {
+      const chat = new Chat();
+      chat.userId = user.id;
+      chat.messages = [messages];
+      const savedChat = await this.chatRepository.save(chat);
+      // user.chats.push(savedChat);
+      await this.userRepository.save(user);
 
-  async sendMessage(userId: string, message: string): Promise<Chat> {
-    const sentMessage = new Chat();
-    sentMessage.userId = userId;
-    sentMessage.message = message;
-
-    return sentMessage;
+      return savedChat;
+    } else {
+      const chat = await this.chatRepository.findOne({
+        where: { id: chatId },
+      });
+      chat.messages.push(messages);
+      return this.chatRepository.save(chat);
+    }
   }
 }

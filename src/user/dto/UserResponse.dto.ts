@@ -1,6 +1,7 @@
 import { PrimaryGeneratedColumn, Column, OneToMany } from 'typeorm';
 import { ApiProperty, ApiResponseProperty } from '@nestjs/swagger';
 import { IsEmail, IsNotEmpty } from 'class-validator';
+import { Chat } from '../../chat/chat.entity';
 
 export class UserResponseDTO {
   @PrimaryGeneratedColumn()
@@ -29,4 +30,7 @@ export class UserResponseDTO {
   @IsNotEmpty()
   @IsEmail()
   email: string;
+
+  @OneToMany(() => Chat, (chat) => chat.user)
+  chats: Chat[];
 }

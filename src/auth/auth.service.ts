@@ -19,6 +19,26 @@ export class AuthService {
     private readonly jwtService: JwtService,
   ) {}
 
+  async decodeToken(token: string): Promise<User | null> {
+    try {
+      const decodedToken = this.jwtService.decode(token) as { sub: number };
+      if (!decodedToken || !decodedToken.sub) {
+        return null;
+      }
+
+      const userId = decodedToken.sub;
+      const user = await this.userService.findById(userId);
+
+      if (!user) {
+        return null;
+      }
+
+      return user;
+    } catch (error) {
+      return null;
+    }
+  }
+
   async register(userDto: RegisterUserDTO): Promise<User> {
     console.log(userDto.password);
     if (!userDto.password) {
@@ -29,8 +49,8 @@ export class AuthService {
       email: userDto.email,
       firstName: userDto.firstName,
       lastName: userDto.lastName,
-
       password: hashedPassword,
+      chats: [],
       id: null,
     };
     const res = await this.userService.create(user);
