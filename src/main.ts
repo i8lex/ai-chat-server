@@ -27,7 +27,7 @@ async function bootstrap() {
 
   app.useWebSocketAdapter(io);
 
-  await app.listen(3001);
+  await app.listen(3000);
   console.log(`Application is running on: ${await app.getUrl()}`);
 }
 
